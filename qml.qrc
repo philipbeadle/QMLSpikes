@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>images/celestial.png</file>
+        <file>images/jean.png</file>
+        <file>images/micah.png</file>
+        <file>images/philip.png</file>
+        <file>Contacts.qml</file>
+        <file>Chat.qml</file>
+    </qresource>
+</RCC>
