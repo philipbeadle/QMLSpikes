@@ -25,7 +25,7 @@ Page {
             width: listView.width - listView.leftMargin - listView.rightMargin
             height: avatar.implicitHeight
             leftPadding: avatar.implicitWidth + 32
-            onClicked: contacts.StackView.view.push("qrc:/Chat.qml", { inConversationWith: modelData })
+            onClicked: contacts.StackView.view.push("qrc:/Chat.qml", { inConversationWith: modelData.name })
             Image {
                 id: avatar
                 source: "qrc:/images/" + modelData.avatar

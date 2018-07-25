@@ -26,6 +26,52 @@ Page {
 
     ColumnLayout {
         anchors.fill: parent
+        ListModel {
+            id: arcs
+
+            ListElement {
+                name: "Phil"
+                avatar: "images/philip.png"
+                availBegin: 0
+                availEnd: 180
+                booked: [
+                    ListElement {
+                        bookedBegin: 30
+                        bookedDuration: 5
+                    },
+                    ListElement {
+                        bookedBegin: 60
+                        bookedDuration: 5
+                    }
+                ]
+            }
+            ListElement {
+                name: "Micah"
+                avatar: "images/micah.png"
+                availBegin: 300
+                availEnd: 180
+                booked: [
+                    ListElement {
+                        bookedBegin: 310
+                        bookedDuration: 5
+                    }
+                ]
+            }
+        }
+        Pane {
+            id: presence
+            Layout.fillWidth: true
+
+            RowLayout {
+                width: parent.width
+                PresenceArcs {
+                    presenceArcs: arcs
+                    width: 300
+                    height: 300
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+        }
 
         ListView {
             id: chatList
@@ -37,11 +83,17 @@ Page {
             verticalLayoutDirection: ListView.BottomToTop
             spacing: 12
             model: [
+                {"author": {"name":"Philip", "avatar":"philip.png"}, "sentByMe":"true", "message":"Phil chat 1", "timestamp":"2018.07.18:00:11:22"},
+                {"author": {"name":"Philip", "avatar":"philip.png"}, "sentByMe":"true", "message":"Phil message", "timestamp":"2018.07.18:00:11:22"},
+                {"author": {"name":"Micah", "avatar":"micah.png"}, "sentByMe":"false", "message":"Micah More chats", "timestamp":"2018.07.18:00:11:22"},
+                {"author": {"name":"Philip", "avatar":"philip.png"}, "sentByMe":"true", "message":"Phil Another tweet", "timestamp":"2018.07.18:00:11:22"},
+                {"author": {"name":"Micah", "avatar":"micah.png"}, "sentByMe":"false", "message":"Micah Blah blah Micah Blah blah Micah Blah blah Blah blah", "timestamp":"2018.07.18:00:11:22"},
+                {"author": {"name":"Philip", "avatar":"philip.png"}, "sentByMe":"true", "message":"Phil message", "timestamp":"2018.07.18:00:11:22"},
                 {"author": {"name":"Philip", "avatar":"philip.png"}, "sentByMe":"true", "message":"Phil Testing chat", "timestamp":"2018.07.18:00:11:22"},
                 {"author": {"name":"Micah", "avatar":"micah.png"}, "sentByMe":"false", "message":"Micah More chats", "timestamp":"2018.07.18:00:11:22"},
                 {"author": {"name":"Philip", "avatar":"philip.png"}, "sentByMe":"true", "message":"Phil Another tweet", "timestamp":"2018.07.18:00:11:22"},
                 {"author": {"name":"Micah", "avatar":"micah.png"}, "sentByMe":"false", "message":"Micah Blah blah Micah Blah blah Micah Blah blah Micah Blah blah Micah Blah blah Micah Blah blah Micah Blah blah Micah Blah blah", "timestamp":"2018.07.18:00:11:22"},
-                {"author": {"name":"Philip", "avatar":"philip.png"}, "sentByMe":"true", "message":"Phil messahr", "timestamp":"2018.07.18:00:11:22"}
+                {"author": {"name":"Philip", "avatar":"philip.png"}, "sentByMe":"true", "message":"Phil message", "timestamp":"2018.07.18:00:11:22"}
             ]
             delegate: Column {
                 readonly property bool sentByMe: (modelData.sentByMe === 'true')
@@ -56,12 +108,13 @@ Page {
                         source: !sentByMe ? "qrc:/images/" + modelData.author.avatar : ""
                         width: 50
                         height: 50
+
                     }
                     Rectangle {
                         width: Math.min(messageText.implicitWidth + 24, chatList.width - (!sentByMe ? avatar.width + messageRow.spacing : 0))
                         height: messageText.implicitHeight + 24
                         color: sentByMe ? "lightgrey" : "steelblue"
-
+                        radius: 15
                         Label {
                             id: messageText
                             text: modelData.message
@@ -101,6 +154,7 @@ Page {
                     id: sendButton
                     text: qsTr("Send")
                     enabled: messageField.length > 0
+                    onClicked: chatList.model.push({"author": {"name":"Philip", "avatar":"philip.png"}, "sentByMe":"true", "message":"Appended", "timestamp":"2018.07.18:00:11:22"})
                 }
             }
         }
