@@ -12,7 +12,6 @@ Window {
        id: stackView
        anchors.fill: parent
        initialItem: Contacts {
-           anchors.fill: parent
        }
    }
 }

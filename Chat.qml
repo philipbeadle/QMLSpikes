@@ -40,8 +40,8 @@ Page {
                         bookedDuration: 5
                     },
                     ListElement {
-                        bookedBegin: 60
-                        bookedDuration: 5
+                        bookedBegin: 120
+                        bookedDuration: 15
                     }
                 ]
             }
@@ -60,15 +60,15 @@ Page {
         }
         Pane {
             id: presence
-            Layout.fillWidth: true
-
+            anchors.horizontalCenter: parent.horizontalCenter
             RowLayout {
+                Layout.fillWidth: true
                 width: parent.width
                 PresenceArcs {
+                    Layout.alignment : AlignHCenter
                     presenceArcs: arcs
                     width: 300
                     height: 300
-                    anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
         }

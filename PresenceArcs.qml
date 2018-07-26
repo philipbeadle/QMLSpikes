@@ -13,10 +13,12 @@ Item {
         source: "images/24-hour-clock-face.jpg"
         anchors.horizontalCenter : parent.horizontalCenter
 
-        property int radius
         function calculateRadius(size, index) {
-            radius = size / (arcs.count + 2) * (index + 1)
             return size / (arcs.count + 2) * (index + 1);
+        }
+
+        TestCase {
+
         }
 
         Repeater {
@@ -32,46 +34,58 @@ Item {
                    capStyle: ShapePath.RoundCap
 
                    PathAngleArc {
+                       id: presenceArc
                        centerX: parent.width / 2; centerY: parent.height / 2
                        radiusX: presence.calculateRadius(parent.width, index); radiusY: presence.calculateRadius(parent.height, index)
                        startAngle: availBegin
                        SequentialAnimation on sweepAngle {
                            loops: 1
-                           NumberAnimation { to: availEnd; duration: 2000 }
+                           NumberAnimation { to: availEnd; duration: 500 }
                        }
                    }
-               }
-               Image {
-                   id: avatarImage
-                   x: parent.width / 2
-                   y: parent.height / (arcs.count + 2) * (index + 1) + (parent.height / 2)
-                   width: 50
-                   height: 50
-                   source: avatar
                }
                Repeater {
                    model: booked
                    Shape {
                       anchors.fill: parent
-                      scale: 0.5
 
                       ShapePath {
                           fillColor: "transparent"
                           strokeColor: "red"
                           strokeWidth: 20
-                          capStyle: ShapePath.RoundCap
 
                           PathAngleArc {
                               centerX: parent.width / 2; centerY: parent.height / 2
-                              radiusX: presence.radius; radiusY: presence.radius
+                              radiusX: presenceArc.radiusX; radiusY: presenceArc.radiusY
                               startAngle: bookedBegin
-                              SequentialAnimation on sweepAngle {
-                                  loops: 1
-                                  NumberAnimation { to: bookedDuration; duration: 2000 }
-                              }
+                              sweepAngle: bookedDuration
                           }
                       }
                   }
+               }
+               Image {
+                   id: avatarImage
+                   x: parent.width / 2
+                   y: parent.height / (arcs.count + 2) * (index + 1) + (parent.height / 2) -25
+                   width: 50
+                   height: 50
+                   source: avatar
+                   property bool rounded: true
+                   property bool adapt: true
+
+                   layer.enabled: rounded
+                   layer.effect: OpacityMask {
+                       maskSource: Item {
+                           width: avatarImage.width
+                           height: avatarImage.height
+                           Rectangle {
+                               anchors.centerIn: parent
+                               width: avatarImage.width
+                               height: avatarImage.height
+                               radius: Math.min(width, height)
+                           }
+                       }
+                   }
                }
            }
         }
@@ -83,17 +97,11 @@ Item {
             anchors.fill: parent
             property int hours
             property int minutes
-            property int seconds
-            property real shift
-            property bool night: false
-            property bool internationalTime: true //Unset for local time
 
             function timeChanged() {
                 var date = new Date;
-                hours = internationalTime ? date.getUTCHours() + Math.floor(10) : date.getHours()
-                night = ( hours < 7 || hours > 19 )
-                minutes = internationalTime ? date.getUTCMinutes() + ((10 % 1) * 60) : date.getMinutes()
-                seconds = date.getUTCSeconds();
+                hours = date.getHours()
+                minutes = date.getMinutes()
             }
 
             Timer {
